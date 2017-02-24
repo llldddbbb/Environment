@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应dao接口 -->
+<mapper namespace="com.dao.DeviceDao">
+    <resultMap id="DeviceResult" type="Device">
+        <result property="TimeStamp" column="TimeStamp"/>
+        <result property="NO_ug" column="NO_ug"/>
+        <result property="NO_ppb" column="NO_ppb"/>
+        <result property="NO2_ug" column="NO2_ug"/>
+        <result property="NO2_ppb" column="NO2_ppb"/>
+        <result property="CO_mg" column="CO_mg"/>
+        <result property="CO_ppm" column="CO_ppm"/>
+        <result property="CO2_mg" column="CO2_mg"/>
+        <result property="CO2_ppm" column="CO2_ppm"/>
+        <result property="O3_ug" column="O3_ug"/>
+        <result property="O3_ppb" column="O3_ppb"/>
+        <result property="SO2_ug" column="SO2_ug"/>
+        <result property="SO2_ppb" column="SO2_ppb"/>
+        <result property="PM25_ug" column="PM2.5_ug"/>
+        <result property="PM10_ug" column="PM10_ug"/>
+        <result property="VOC_ppb" column="VOC_ppb"/>
+        <result property="AQI" column="AQI"/>
+        <result property="AQHI" column="AQHI"/>
+        <result property="Temp" column="Temp"/>
+        <result property="Humi" column="Humi"/>
+    </resultMap>
+    
+	<select id="findDeviceList" resultMap="DeviceResult" parameterType="Map" statementType="STATEMENT">
+	    <choose>
+	        <when test="airQulityType!=null and airQulityType!=''">
+	 		   select ${airQulityType} from ${deviceName}
+	        </when>
+	        <otherwise>
+	            select * from ${deviceName} 
+	        </otherwise>
+	    </choose>
+	    <where>
+	        <if test="PM25_alerm!=null and PM25_alerm!=''">
+	            and `PM2.5_ug`&gt;=${PM25_alerm}
+	        </if>
+	        <if test="PM10_alerm!=null and PM10_alerm!=''">
+	            and `PM10_ug`&gt;=${PM10_alerm}
+	        </if>
+	        <if test="NO_ug_alerm!=null and NO_ug_alerm!=''">
+	            and `NO_ug`&gt;=${NO_ug_alerm}
+	        </if>
+	        <if test="NO_ppb_alerm!=null and NO_ppb_alerm!=''">
+	            and `NO_ppb`&gt;=${NO_ppb_alerm}
+	        </if>
+	        <if test="NO2_ug_alerm!=null and NO2_ug_alerm!=''">
+	            and `NO2_ug`&gt;=${NO2_ug_alerm}
+	        </if>
+	        <if test="NO2_ppb_alerm!=null and NO2_ppb_alerm!=''">
+	            and `NO2_ppb`&gt;=${NO2_ppb_alerm}
+	        </if>
+	        <if test="CO_mg_alerm!=null and CO_mg_alerm!=''">
+	            and `CO_mg`&gt;=${CO_mg_alerm}
+	        </if>
+	        <if test="CO_ppm_alerm!=null and CO_ppm_alerm!=''">
+	            and `CO_ppm`&gt;=${CO_ppm_alerm}
+	        </if>
+	        <if test="O3_ppb_alerm!=null and O3_ppb_alerm!=''">
+	            and `O3_ppb`&gt;=${O3_ppb_alerm}
+	        </if>
+	         <if test="SO2_ug_alerm!=null and SO2_ug_alerm!=''">
+	            and `SO2_ug`&gt;=${SO2_ug_alerm}
+	        </if>
+	         <if test="SO2_ppb_alerm!=null and SO2_ppb_alerm!=''">
+	            and `SO2_ppb`&gt;=${SO2_ppb_alerm}
+	        </if>
+	        <if test="Temp_alerm!=null and Temp_alerm!=''">
+	            and `Temp`&gt;=${Temp_alerm}
+	        </if>
+	        <if test="Humi_alerm!=null and Humi_alerm!=''">
+	            and `Humi`&gt;=${Humi_alerm}
+	        </if>
+	        
+		    <if test="s_TimeStamp!=null">
+		        and TimeStamp &gt;=${s_TimeStamp}
+		    </if>
+		    <if test="e_TimeStamp!=null">
+		        and TimeStamp &lt;=${e_TimeStamp}
+		    </if>
+	    </where>
+	    order by TimeStamp desc
+	     <if test="start!=null and pageSize!=null">
+       		limit ${start},${pageSize}
+       	</if>
+	</select>
+	
+	<select id="getChartsData" resultMap="DeviceResult" parameterType="Map" statementType="STATEMENT">
+	    SELECT `TimeStamp`,`${airQulityType}` FROM ${deviceName}
+	    <where>
+		    <if test="s_TimeStamp!=null">
+		        and TimeStamp &gt;=${s_TimeStamp}
+		    </if>
+		    <if test="e_TimeStamp!=null">
+		        and TimeStamp &lt;=${e_TimeStamp}
+		    </if>
+	    </where>
+	     ORDER BY `TimeStamp`
+	</select>
+	
+	<select id="getDeviceCount" parameterType="Map" resultType="Integer"  statementType="STATEMENT">
+	    select count(*) from ${deviceName} 
+	    <where>
+	        <if test="PM25_alerm!=null and PM25_alerm!=''">
+	            and `PM2.5_ug`&gt;=${PM25_alerm}
+	        </if>
+	        <if test="NO_ug_alerm!=null and NO_ug_alerm!=''">
+	            and `NO_ug`&gt;=${NO_ug_alerm}
+	        </if>
+	        <if test="NO_ppb_alerm!=null and NO_ppb_alerm!=''">
+	            and `NO_ppb`&gt;=${NO_ppb_alerm}
+	        </if>
+	        <if test="NO2_ug_alerm!=null and NO2_ug_alerm!=''">
+	            and `NO2_ug`&gt;=${NO2_ug_alerm}
+	        </if>
+	        <if test="NO2_ppb_alerm!=null and NO2_ppb_alerm!=''">
+	            and `NO2_ppb`&gt;=${NO2_ppb_alerm}
+	        </if>
+	        <if test="CO_mg_alerm!=null and CO_mg_alerm!=''">
+	            and `CO_mg`&gt;=${CO_mg_alerm}
+	        </if>
+	        <if test="CO_ppm_alerm!=null and CO_ppm_alerm!=''">
+	            and `CO_ppm`&gt;=${CO_ppm_alerm}
+	        </if>
+	        <if test="O3_ppb_alerm!=null and O3_ppb_alerm!=''">
+	            and `O3_ppb`&gt;=${O3_ppb_alerm}
+	        </if>
+	         <if test="SO2_ug_alerm!=null and SO2_ug_alerm!=''">
+	            and `SO2_ug`&gt;=${SO2_ug_alerm}
+	        </if>
+	         <if test="SO2_ppb_alerm!=null and SO2_ppb_alerm!=''">
+	            and `SO2_ppb`&gt;=${SO2_ppb_alerm}
+	        </if>
+	        <if test="Temp_alerm!=null and Temp_alerm!=''">
+	            and `Temp`&gt;=${Temp_alerm}
+	        </if>
+	        <if test="Humi_alerm!=null and Humi_alerm!=''">
+	            and `Humi`&gt;=${Humi_alerm}
+	        </if>
+	        
+		    <if test="s_TimeStamp!=null">
+		        and TimeStamp &gt;=${s_TimeStamp}
+		    </if>
+		    <if test="e_TimeStamp!=null">
+		        and TimeStamp &lt;=${e_TimeStamp}
+		    </if>
+	    </where>
+	</select>
+	
+	
+	<select id="getDeviceNewestDate" parameterType="Map" resultType="String" statementType="STATEMENT">
+	    SELECT `TimeStamp` FROM ${deviceName}  ORDER BY `TimeStamp` desc LIMIT 0,1 
+	</select>
+	
+	<select id="getDeviceByTimeStamp" parameterType="Map" resultMap="DeviceResult" statementType="STATEMENT">
+		SELECT * FROM ${deviceName} 
+		<where>
+			<if test="TimeStamp!=null and TimeStamp!=''">
+				and `TimeStamp`=${TimeStamp}
+			</if>
+			
+		</where>
+	</select>
+	
+</mapper> 

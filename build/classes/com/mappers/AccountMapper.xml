@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应dao接口 -->
+<mapper namespace="com.dao.AccountDao">
+    <resultMap id="AccountResult" type="Account">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="place" column="place"/>
+        <result property="validTime" column="validTime"/>
+    </resultMap>
+	<select id="login" resultMap="AccountResult" parameterType="Account">
+	    select * from account where username=#{username} and password=#{password}
+	</select>
+</mapper> 

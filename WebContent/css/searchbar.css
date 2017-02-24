@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+.searchbar{ 
+text-align: left;
+position:relative;
+}
+.autocomplete{
+border: 1px solid #9ACCFB;
+background-color: white;
+text-align: left;
+}
+.autocomplete li{
+list-style-type: none;
+}
+.clickable {
+cursor: default;
+}
+.highlight {
+background-color: #9ACCFB;
+}

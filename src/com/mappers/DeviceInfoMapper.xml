@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应dao接口 -->
+<mapper namespace="com.dao.DeviceInfoDao">
+    <resultMap id="DeviceInfoResult" type="DeviceInfo">
+        <result property="Item" column="Item"/>
+        <result property="DeviceName" column="DeviceName"/>
+        <result property="StartTime" column="StartTime"/>
+        <result property="EndTime" column="EndTime"/>
+    </resultMap>
+    
+	<select id="getDeviceInfoById" resultMap="DeviceInfoResult" parameterType="Integer">
+	    select * from device_info where Item=#{id}
+	</select>
+	
+	<select id="checkTableExist" resultType="String" parameterType="Map">
+	    SELECT table_name FROM information_schema.TABLES WHERE table_name =#{table_name}
+	</select>
+    
+</mapper> 

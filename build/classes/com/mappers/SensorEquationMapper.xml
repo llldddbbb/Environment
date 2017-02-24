@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应dao接口 -->
+<mapper namespace="com.dao.SensorEquationDao">
+    <resultMap id="SensorEquationResult" type="SensorEquation">
+        <result property="Item" column="Item"/>
+        <result property="StartTime" column="StartTime"/>
+        <result property="EndTime" column="EndTime"/>
+        <result property="a" column="a"/>
+        <result property="b" column="b"/>
+        <result property="c" column="c"/>
+        <result property="d" column="d"/>
+        <result property="e" column="e"/>
+        <result property="f" column="f"/>
+    </resultMap>
+    
+	<select id="getSensorEquationByItem" resultMap="SensorEquationResult" parameterType="Map">
+	    SELECT * FROM sensor_equation WHERE `Code` IN(SELECT `Code` FROM sensor_basic WHERE `Code`IN(SELECT `NO_Code` FROM device_info WHERE Item IN (SELECT DeviceId FROM calculation_version WHERE DeviceId =${Item})) OR `Code` IN(SELECT `NO2_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})) OR `Code` IN(SELECT `CO_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})) OR `Code` IN(SELECT `CO2_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})) OR `Code` IN(SELECT `SO2_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})) OR `Code` IN(SELECT `PM_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})) OR `Code` IN(SELECT `O3_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})) OR `Code` IN(SELECT `VOC_Code` FROM device_info WHERE Item=(SELECT DeviceId FROM calculation_version WHERE DeviceId=${Item})))
+	</select>
+</mapper> 

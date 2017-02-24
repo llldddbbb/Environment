@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应dao接口 -->
+<mapper namespace="com.dao.CityDao">
+    <resultMap id="CityResult" type="City">
+        <result property="cityID" column="cityID"/>
+        <result property="cityName" column="cityName"/>
+        <result property="lat" column="lat"/>
+        <result property="lng" column="lng"/>
+        <result property="picture" column="picture"></result>
+        <result property="showAQI" column="showAQI"/>
+        <association property="deviceInfo" column="device_Item" select="com.dao.DeviceInfoDao.getDeviceInfoById"></association>
+    </resultMap>
+    
+	<select id="findCityList" resultMap="CityResult" parameterType="Map">
+	    select * from city 
+	    <where>
+	        <if test="cityID!=null">
+	            and cityID=#{cityID}
+	        </if>
+	        <if test="placesearch!=null and placesearch!=''">
+	            and cityName like #{placesearch}
+	        </if>
+	    </where>
+	</select>
+	
+	<select id="getCityByCityName" resultMap="CityResult" parameterType="Map">
+	    select * from city where cityName=#{cityName}
+	</select>
+	
+	<update id="updateCity" parameterType="City">
+	    update city
+	    <set>
+	       <if test="cityName!=null and cityName!=''">
+	           cityName=#{cityName},
+	       </if>
+	       <if test="lat!=null and lat!=''">
+	           lat=#{lat},
+	       </if>
+	       <if test="lng!=null and lng!=''">
+	           lng=#{lng},
+	       </if>
+	       <if test="picture!=null and picture!=''">
+	           picture=#{picture},
+	       </if>
+	       <if test="showAQI!=null and showAQI!=''">
+	           showAQI=#{showAQI},
+	       </if>
+	    </set>
+	    where cityID=#{cityID} and device_Item=${deviceInfo.Item}
+	</update>
+	
+</mapper> 
